@@ -26,13 +26,13 @@ input a;
 output a_ext;
 
 wire [15:0] a;
-reg [31:0] b;
+reg [31:0] a_ext;
 
 always @* begin
-if (a[15] <= 1)
-    b <= {16'b1,a};
+if (a[15] == 1)
+    a_ext <= {16'b1111111111111111,a};
 else
-    b <= {16'b0,a};
+    a_ext <= {16'b0,a};
 end
 
 endmodule

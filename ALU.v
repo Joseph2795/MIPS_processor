@@ -20,21 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ALU(clk,a,b,ALU_op,ALU_res);
+module ALU(clk,a,b,ALU_op,ALU_res,zero);
 
 input clk;
 input a;
 input b;
 input ALU_op;
 output ALU_res;
+output zero;
 
 wire [31:0] a;
 wire [31:0] b;
-wire [3:0] ALU_op;
+wire [2:0] ALU_op;
 reg  [31:0] ALU_res;
 reg zero;
 
-always @(posedge clk) begin
+always @* begin
 case (ALU_op)
 3'b000: begin
     ALU_res <= a + b;
@@ -52,12 +53,17 @@ end
     ALU_res <= a & b; 
     zero <= 0; 
 end
-3'b100: begin
-    ALU_res <= a; 
-    if (a == b)
-        zero <= 1;
-    else
-        zero <= 0;       
+3'b101: begin
+    ALU_res <= ~(a | b);
+    zero <= 0;   
+end
+3'b110: begin
+    ALU_res <= ~a;
+    zero <= 0;   
+end
+3'b111: begin
+    ALU_res <= ALU_res;
+    zero <= zero;       
 end
 endcase
 end
